@@ -43,8 +43,9 @@ function App() {
   };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.heading}>Todo List</h1>
+  <div style={styles.container}>
+    <div style={styles.card}>
+      <h1 style={styles.heading}>✨ Todo List</h1>
 
       <div style={styles.inputContainer}>
         <input
@@ -62,7 +63,6 @@ function App() {
         {todos.map((t) => (
           <li key={t.id} style={styles.listItem}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-    
               <input
                 type="checkbox"
                 checked={t.completed}
@@ -77,7 +77,6 @@ function App() {
               >
                 {t.title}
               </span>
-
             </div>
 
             <button
@@ -90,19 +89,26 @@ function App() {
         ))}
       </ul>
     </div>
-  );
+  </div>
+);
 };
-
 const styles = {
   container: {
     maxWidth: "500px",
-    margin: "50px auto",
+    margin: "60px auto",
     padding: "20px",
-    textAlign: "center",
-    fontFamily: "Arial",
+    fontFamily: "Segoe UI, sans-serif",
+  },
+  card: {
+    background: "#ffffff",
+    padding: "20px",
+    borderRadius: "12px",
+    boxShadow: "0 8px 20px rgba(0,0,0,0.1)",
   },
   heading: {
+    textAlign: "center",
     marginBottom: "20px",
+    color: "#333",
   },
   inputContainer: {
     display: "flex",
@@ -112,14 +118,18 @@ const styles = {
   input: {
     flex: 1,
     padding: "10px",
-    fontSize: "16px",
+    borderRadius: "8px",
+    border: "1px solid #ccc",
+    fontSize: "14px",
   },
   addBtn: {
     padding: "10px 15px",
     backgroundColor: "#4CAF50",
     color: "white",
     border: "none",
+    borderRadius: "8px",
     cursor: "pointer",
+    transition: "0.2s",
   },
   list: {
     listStyle: "none",
@@ -128,14 +138,21 @@ const styles = {
   listItem: {
     display: "flex",
     justifyContent: "space-between",
-    padding: "10px",
-    borderBottom: "1px solid #ccc",
+    alignItems: "center",
+    padding: "12px",
+    marginBottom: "10px",
+    borderRadius: "8px",
+    background: "#f9f9f9",
+    transition: "0.2s",
   },
   deleteBtn: {
-    background: "red",
+    background: "#ff4d4d",
     color: "white",
     border: "none",
+    borderRadius: "6px",
+    padding: "5px 8px",
     cursor: "pointer",
   },
 };
+
 export default App;
