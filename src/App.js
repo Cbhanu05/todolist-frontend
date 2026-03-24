@@ -4,6 +4,8 @@ import axios from "axios";
 function App() {
   const [todos, setTodos] = useState([]);
   const [title, setTitle] = useState("");
+  const [editingId, setEditingId] = useState(null);
+  const [editText, setEditText] = useState("");
 
   const API = "http://localhost:8080/api/todos";
 
@@ -37,8 +39,25 @@ function App() {
     fetchTodos();
   };
 
-  const deleteTodo = async (id) => {
-    await axios.delete(`${API}/${id}`);
+  const startEdit = (todo) => {
+  setEditingId(todo.id);
+  setEditText(todo.title);
+  };
+
+const saveEdit = async (id) => {
+  await axios.put(`${API}/${id}`, {
+    title: editText,
+    completed: todos.find(t => t.id === id).completed,
+  });
+
+  setEditingId(null);
+  setEditText("");
+  fetchTodos();
+};
+
+
+const deleteTodo = async (id) => {
+  await axios.delete(`${API}/${id}`);
     fetchTodos();
   };
 
@@ -68,7 +87,13 @@ function App() {
                 checked={t.completed}
                 onChange={() => toggleTodo(t)}
               />
-
+               {editingId === t.id ? (
+                  <input
+                    value={editText}
+                    onChange={(e) => setEditText(e.target.value)}
+                    style={styles.input}
+                  />
+              ) : (
               <span
                 style={{
                   textDecoration: t.completed ? "line-through" : "none",
@@ -77,14 +102,27 @@ function App() {
               >
                 {t.title}
               </span>
+              )}
             </div>
 
-            <button
-              style={styles.deleteBtn}
-              onClick={() => deleteTodo(t.id)}
-            >
+             <div style={{ display: "flex", gap: "5px" }}>
+                {editingId === t.id ? (
+                  <button style={styles.addBtn} onClick={() => saveEdit(t.id)}>
+                     Save
+                  </button>
+                ) : (
+                 <button style={styles.addBtn} onClick={() => startEdit(t)}>
+                  ✏️
+                  </button>
+                )}
+
+              <button
+                  style={styles.deleteBtn}
+                  onClick={() => deleteTodo(t.id)}
+              >
               ❌
             </button>
+              </div>
           </li>
         ))}
       </ul>
