@@ -9,7 +9,7 @@ function App() {
 
   const API = "https://todos-backend-fclt.onrender.com/api/todos";
 
-  const toggleTodo = async (todo) => {
+ const toggleTodo = async (todo) => {
   await axios.put(`${API}/${todo.id}`, {
     title: todo.title,
     completed: !todo.completed,
