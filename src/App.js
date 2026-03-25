@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 
 function App() {
@@ -7,9 +7,10 @@ function App() {
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState("");
 
-const API = process.env.REACT_APP_API_URL || "http://localhost:8080/api/todos";  useEffect(() => {
+const API = process.env.REACT_APP_API_URL || "http://localhost:8080/api/todos"; 
+ useEffect(() => {
     fetchTodos();
-  }, []);
+  }, [fetchTodos]);
 
   const fetchTodos = async () => {
     const res = await axios.get(API);
