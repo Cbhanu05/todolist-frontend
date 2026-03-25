@@ -12,10 +12,10 @@ const API = process.env.REACT_APP_API_URL || "http://localhost:8080/api/todos";
     fetchTodos();
   }, [fetchTodos]);
 
-  const fetchTodos = async () => {
+  const fetchTodos = useCallback(async () => {
     const res = await axios.get(API);
     setTodos(res.data);
-  };
+  }, [API]);
 
   const addTodo = async () => {
     if (!title) return;
