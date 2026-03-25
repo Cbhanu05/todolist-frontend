@@ -7,16 +7,7 @@ function App() {
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState("");
 
-  const API = "https://todos-backend-fclt.onrender.com/api/todos";
-
- const toggleTodo = async (todo) => {
-  await axios.put(`${API}/${todo.id}`, {
-    title: todo.title,
-    completed: !todo.completed,
-  });
-
-  fetchTodos();
-};
+  const API = "http://localhost:8080/api/todos"; 
 
   useEffect(() => {
     fetchTodos();
@@ -39,97 +30,107 @@ function App() {
     fetchTodos();
   };
 
-  const startEdit = (todo) => {
-  setEditingId(todo.id);
-  setEditText(todo.title);
+  const toggleTodo = async (todo) => {
+    await axios.put(`${API}/${todo.id}`, {
+      title: todo.title,
+      completed: !todo.completed,
+    });
+
+    fetchTodos();
   };
 
-const saveEdit = async (id) => {
-  await axios.put(`${API}/${id}`, {
-    title: editText,
-    completed: todos.find(t => t.id === id).completed,
-  });
+  const startEdit = (todo) => {
+    setEditingId(todo.id);
+    setEditText(todo.title);
+  };
 
-  setEditingId(null);
-  setEditText("");
-  fetchTodos();
-};
+  const saveEdit = async (id) => {
+    await axios.put(`${API}/${id}`, {
+      title: editText,
+      completed: todos.find((t) => t.id === id).completed,
+    });
 
+    setEditingId(null);
+    setEditText("");
+    fetchTodos();
+  };
 
-const deleteTodo = async (id) => {
-  await axios.delete(`${API}/${id}`);
+  const deleteTodo = async (id) => {
+    await axios.delete(`${API}/${id}`);
     fetchTodos();
   };
 
   return (
-  <div style={styles.container}>
-    <div style={styles.card}>
-      <h1 style={styles.heading}>✨ Todo List</h1>
+    <div style={styles.container}>
+      <div style={styles.card}>
+        <h1 style={styles.heading}>✨ Todo List</h1>
 
-      <div style={styles.inputContainer}>
-        <input
-          style={styles.input}
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Enter a task..."
-        />
-        <button style={styles.addBtn} onClick={addTodo}>
-          Add
-        </button>
-      </div>
+        <div style={styles.inputContainer}>
+          <input
+            style={styles.input}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Enter a task..."
+          />
+          <button style={styles.addBtn} onClick={addTodo}>
+            Add
+          </button>
+        </div>
 
-      <ul style={styles.list}>
-        {todos.map((t) => (
-          <li key={t.id} style={styles.listItem}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <input
-                type="checkbox"
-                checked={t.completed}
-                onChange={() => toggleTodo(t)}
-              />
-               {editingId === t.id ? (
+        <ul style={styles.list}>
+          {todos.map((t) => (
+            <li key={t.id} style={styles.listItem}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <input
+                  type="checkbox"
+                  checked={t.completed}
+                  onChange={() => toggleTodo(t)}
+                />
+
+                {editingId === t.id ? (
                   <input
                     value={editText}
                     onChange={(e) => setEditText(e.target.value)}
                     style={styles.input}
                   />
-              ) : (
-              <span
-                style={{
-                  textDecoration: t.completed ? "line-through" : "none",
-                  opacity: t.completed ? 0.6 : 1,
-                }}
-              >
-                {t.title}
-              </span>
-              )}
-            </div>
+                ) : (
+                  <span
+                    style={{
+                      textDecoration: t.completed ? "line-through" : "none",
+                      opacity: t.completed ? 0.6 : 1,
+                    }}
+                  >
+                    {t.title}
+                  </span>
+                )}
+              </div>
 
-             <div style={{ display: "flex", gap: "5px" }}>
+              <div style={{ display: "flex", gap: "5px" }}>
                 {editingId === t.id ? (
                   <button style={styles.addBtn} onClick={() => saveEdit(t.id)}>
-                     Save
+                    Save
                   </button>
                 ) : (
-                 <button style={styles.addBtn} onClick={() => startEdit(t)}>
-                  ✏️
+                  <button style={styles.addBtn} onClick={() => startEdit(t)}>
+                    ✏️
                   </button>
                 )}
 
-              <button
+                <button
                   style={styles.deleteBtn}
                   onClick={() => deleteTodo(t.id)}
-              >
-              ❌
-            </button>
+                >
+                  ❌
+                </button>
               </div>
-          </li>
-        ))}
-      </ul>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
-};
+  );
+}
+
 const styles = {
   container: {
     maxWidth: "500px",
@@ -167,7 +168,6 @@ const styles = {
     border: "none",
     borderRadius: "8px",
     cursor: "pointer",
-    transition: "0.2s",
   },
   list: {
     listStyle: "none",
@@ -181,7 +181,6 @@ const styles = {
     marginBottom: "10px",
     borderRadius: "8px",
     background: "#f9f9f9",
-    transition: "0.2s",
   },
   deleteBtn: {
     background: "#ff4d4d",
