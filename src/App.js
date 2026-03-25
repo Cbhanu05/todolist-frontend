@@ -8,14 +8,15 @@ function App() {
   const [editText, setEditText] = useState("");
 
 const API = process.env.REACT_APP_API_URL || "http://localhost:8080/api/todos"; 
- useEffect(() => {
-    fetchTodos();
-  }, [fetchTodos]);
 
-  const fetchTodos = useCallback(async () => {
-    const res = await axios.get(API);
-    setTodos(res.data);
-  }, [API]);
+const fetchTodos = useCallback(async () => {
+  const res = await axios.get(API);
+  setTodos(res.data);
+}, [API]);
+
+useEffect(() => {
+   fetchTodos();
+ }, [fetchTodos]);
 
   const addTodo = async () => {
     if (!title) return;
