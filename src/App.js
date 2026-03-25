@@ -7,7 +7,7 @@ function App() {
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState("");
 
-const API = process.env.REACT_APP_API_URL || "http://localhost:8080/api/todos"; 
+const API = process.env.REACT_APP_API_URL;
 
 const fetchTodos = useCallback(async () => {
   const res = await axios.get(API);
