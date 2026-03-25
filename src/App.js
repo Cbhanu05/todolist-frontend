@@ -18,26 +18,36 @@ useEffect(() => {
    fetchTodos();
  }, [fetchTodos]);
 
-  const addTodo = async () => {
-    if (!title) return;
+ const addTodo = async () => {
+  if (!title.trim()) return; // prevent empty todo
 
-    await axios.post(API, {
-      title: title,
+  try {
+    const res = await axios.post(API, {
+      title,
       completed: false,
     });
-
+    setTodos((prev) => [...prev, res.data]); // update UI immediately
     setTitle("");
-    fetchTodos();
-  };
+  } catch (error) {
+    console.error("Failed to add todo:", error);
+    alert("Could not add todo. Check your backend or network.");
+  }
+};
 
-  const toggleTodo = async (todo) => {
-    await axios.put(`${API}/${todo.id}`, {
+ const toggleTodo = async (todo) => {
+  try {
+    const res = await axios.put(`${API}/${todo.id}`, {
       title: todo.title,
       completed: !todo.completed,
     });
-
-    fetchTodos();
-  };
+    setTodos((prev) =>
+      prev.map((t) => (t.id === todo.id ? res.data : t))
+    );
+  } catch (error) {
+    console.error("Failed to toggle todo:", error);
+    alert("Could not update todo. Check your backend or network.");
+  }
+};
 
   const startEdit = (todo) => {
     setEditingId(todo.id);
@@ -45,20 +55,31 @@ useEffect(() => {
   };
 
   const saveEdit = async (id) => {
-    await axios.put(`${API}/${id}`, {
+  try {
+    const updatedTodo = await axios.put(`${API}/${id}`, {
       title: editText,
       completed: todos.find((t) => t.id === id).completed,
     });
-
+    setTodos((prev) =>
+      prev.map((t) => (t.id === id ? updatedTodo.data : t))
+    );
     setEditingId(null);
     setEditText("");
-    fetchTodos();
-  };
+  } catch (error) {
+    console.error("Failed to edit todo:", error);
+    alert("Could not save changes. Check your backend or network.");
+  }
+};
 
   const deleteTodo = async (id) => {
+  try {
     await axios.delete(`${API}/${id}`);
-    fetchTodos();
-  };
+    setTodos((prev) => prev.filter((t) => t.id !== id));
+  } catch (error) {
+    console.error("Failed to delete todo:", error);
+    alert("Could not delete todo. Check your backend or network.");
+  }
+};
 
   return (
     <div style={styles.container}>
