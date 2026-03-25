@@ -7,8 +7,7 @@ function App() {
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState("");
 
-  const API = process.env.REACT_APP_API_URL;
-
+const API = "https://dummyurl.com/api";
   useEffect(() => {
     fetchTodos();
   }, []);
